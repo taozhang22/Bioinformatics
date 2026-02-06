@@ -75,6 +75,7 @@ genes.columns = ["gene_id"]
 
 adata = sc.AnnData(X=mtx.X, obs=barcodes, var=genes)
 adata.obs["Sample"] = ["_".join(x.split("_")[1:3]) for x in adata.obs_names]
+adata.obs["Class"] = [x.split("_")[1] for x in adata.obs["Sample"]]
 adata.obs.index.name = None
 adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
