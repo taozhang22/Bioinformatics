@@ -121,7 +121,6 @@ sc.pl.umap(adata=adata, color=[f"leiden_{res:.2f}" for res in res_list], legend_
 my_res = 0.7
 sc.tl.rank_genes_groups(adata, groupby=f"leiden_{my_res:.2f}", method="wilcoxon", pts=True)
 deg = sc.get.rank_genes_groups_df(adata, group=None)
-deg = deg.query("pvals_adj < 0.05 and logfoldchanges > 0.585 and pct_nz_group >= 0.25")
 top20 = deg.groupby("group", as_index=False).head(20)
 top20.to_csv(f"{dir}/top_deg.csv", index=False)
 
