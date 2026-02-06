@@ -34,8 +34,6 @@ for (sample in unique(seurat$orig.ident)) {
   ggsave(filename = paste0(dir, "/R/", "FeatureScatter_", sample, ".png"), plot = p, width = 8, height = 4)
 }
 # 绘制小提琴图
-for (label in c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.ribo")) {
-  p <- VlnPlot(seurat, features = label, group.by = "orig.ident", pt.size = 0.01, layer = "counts") + NoLegend()
-  ggsave(filename = paste0(dir, "/R/", "VlnPlot_",label, "_", sample, ".png"), plot = p,
-    width = 0.5*length(unique(seurat$orig.ident)), height = 5)
-}
+p <- VlnPlot(object = seurat, features = c("nCount_RNA", "nFeature_RNA", "percent.mt", "percent.ribo"),
+  group.by =  "orig.ident", layer = "counts", ncol = 1); p
+ggsave(plot = p, filename = paste0(dir, "/qc_vlnPlot.png"), width = 0.6 * length(unique(seurat$orig.ident)), height = 20)
