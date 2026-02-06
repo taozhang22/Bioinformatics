@@ -22,6 +22,8 @@ conda install r-seurat-data -y
 conda install r-hdf5r -y
 conda install bioconductor-glmgampoi -y
 conda install r-ape -y
+conda install r-fields -y
+conda install r-maps -y
 conda install r-doubletfinder -y
 conda install r-cowplot -y
 conda install r-lattice -y
@@ -29,8 +31,4 @@ conda install r-matrix -y
 
 # 使用R代码安装package
 install.packages("Rfast2")
-
-
-
-
-
+remotes::install_github('chris-mcginnis-ucsf/DoubletFinder', force = TRUE)
