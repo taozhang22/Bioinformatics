@@ -77,6 +77,7 @@ adata = sc.AnnData(X=mtx.X, obs=barcodes, var=genes)
 adata.obs["Sample"] = ["_".join(x.split("_")[1:3]) for x in adata.obs_names]
 adata.obs["Class"] = [x.split("_")[1] for x in adata.obs["Sample"]]
 adata.obs.index.name = None
+adata.var_names_make_unique()
 adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
@@ -99,10 +100,5 @@ fig, axes = plt.subplots(5, 1, figsize=(0.3 * adata.obs["Sample"].nunique(), 15)
 for i, key in enumerate(["n_genes_by_counts", "total_counts", "pct_counts_mt", "pct_counts_ribo", "pct_counts_hb"]):
     sc.pl.violin(adata, keys=key, groupby="Sample", jitter=0.4, rotation=45, show=False, ax=axes[i])
 plt.tight_layout(); plt.show(); plt.close(fig)
-print(adata.obs["Sample"].value_counts())
 
-# 删除细胞数少于1000的样本
-ncell = adata.obs["Sample"].astype(str).value_counts()
-adata.obs["ncell"] = adata.obs["Sample"].astype(str).map(ncell)
-adata = adata[adata.obs["ncell"] > 1000].copy()
-adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
+print(adata.obs["Sample"].value_counts())
