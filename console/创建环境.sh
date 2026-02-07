@@ -7,7 +7,6 @@ conda search r-base
 conda install r-base=4.4.1 -y
 which R
 
-# 使用conda安装package
 install.packages("devtools")
 install.packages("remotes")
 install.packages("BiocManager")
