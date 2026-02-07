@@ -5,7 +5,23 @@ conda activate R_4.4.1
 
 conda search r-base
 conda install r-base=4.4.1 -y
-which R
+conda install r-pak r-remotes git gcc_linux-64 gxx_linux-64 gfortran_linux-64 make pkg-config -y
+
+conda install r-devtools -y
+conda install r-remotes -y
+conda install r-biocManager -y
+conda install r-tidyverse -y
+conda install r-ggplot2 -y
+conda install r-patchwork -y
+conda install r-data.table -y
+conda install r-openxlsx -y
+conda install r-qs2 -y
+
+conda install r-seurat -y
+conda install r-seurat-data -y
+conda install r-openxlsx -y
+conda install r-qs2 -y
+
 
 install.packages("devtools")
 install.packages("remotes")
