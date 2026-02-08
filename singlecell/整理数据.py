@@ -33,12 +33,12 @@ adata.var_names_make_unique()
 # 制作注释信息文件
 meta1 = pd.read_csv(f"{dir}/{file_meta1}", index_col=0, sep="\t")
 meta1 = meta1[["Sample", "Class"]]
-
 meta2 = pd.read_csv(f"{dir}/{dir}.txt", sep="\t", index_col=0)
-meta2 = meta2[["MSI"]]
 
 meta = meta1.join(meta2, on="Sample", how="inner")
+meta["Source"] = dir
 adata.obs = meta.copy()
+adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
 # 方法二
@@ -100,5 +100,4 @@ fig, axes = plt.subplots(5, 1, figsize=(0.3 * adata.obs["Sample"].nunique(), 15)
 for i, key in enumerate(["n_genes_by_counts", "total_counts", "pct_counts_mt", "pct_counts_ribo", "pct_counts_hb"]):
     sc.pl.violin(adata, keys=key, groupby="Sample", jitter=0.4, rotation=45, show=False, ax=axes[i])
 plt.tight_layout(); plt.show(); plt.close(fig)
-
 print(adata.obs["Sample"].value_counts())
