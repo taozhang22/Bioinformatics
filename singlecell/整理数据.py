@@ -110,7 +110,7 @@ meta2 = pd.read_csv(f"{dir}/{dir}.txt", index_col=0, sep="\t")
 
 meta = meta1.join(meta2, on="Sample", how="left")
 adata.obs = adata.obs.join(meta, how="left")
-adata.write_h5ad(f"{dir}/{dir}.h5ad")
+adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
 # 质量控制
