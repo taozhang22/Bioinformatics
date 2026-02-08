@@ -37,7 +37,7 @@ meta2 = pd.read_csv(f"{dir}/{dir}.txt", sep="\t", index_col=0)
 
 meta = meta1.join(meta2, on="Sample", how="inner")
 meta["Source"] = dir
-adata.obs = meta.copy()
+adata.obs = adata.obs.join(meta, how="left")
 adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
@@ -60,32 +60,57 @@ prefixes = sorted(seen)
 adatas = []
 for prefix in prefixes:
     adata = sc.read_10x_mtx(path=f"{dir}/data", var_names="gene_symbols", cache=False, prefix=prefix)
-    adata.obs["Source"] = dir
     adata.obs["Sample"] = "_".join(prefix.split("_")[1:3])
+    adata.obs["Sample"] = adata.obs["Sample"].astype(str).str.replace("Patient", "P", regex=False)
+    adata.obs["Sample"] = adata.obs["Sample"].astype(str).str.replace("normal", "N", regex=False)
+    adata.obs["Sample"] = adata.obs["Sample"].astype(str).str.replace("carcinoma", "T", regex=False)
     adata.obs["Class"] = prefix.split("_")[2]
+    adata.obs["Class"] = adata.obs["Class"].astype(str).str.replace("normal", "Normal", regex=False)
+    adata.obs["Class"] = adata.obs["Class"].astype(str).str.replace("carcinoma", "Tumor", regex=False)
+    adata.obs_names = adata.obs["Sample"].astype(str) + "_" + adata.obs_names.astype(str)
+    adata.obs["Source"] = dir
+
     adata.var_names_make_unique()
     adatas.append(adata)
 adata = sc.concat(adatas)
 adata.var_names_make_unique()
+
+meta = pd.read_csv(f"{dir}/{dir}.txt", sep="\t", index_col=0)
+adata.obs = adata.obs.join(meta, on="Sample", how="left")
+
 adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
-# 方法三
+# 方法三：表达矩阵分为每个样本一个文件，注释信息只有一个文件
 ###################################################################################################
-dir = "GSE178318"
-mtx = sc.read_mtx(f"{dir}/GSE178318_matrix.mtx.gz").T
-barcodes = pd.read_csv(f"{dir}/GSE178318_barcodes.tsv.gz", header=None, sep="\t", index_col=0)
-barcodes.index.name = None
-genes = pd.read_csv(f"{dir}/GSE178318_genes.tsv.gz", header=None, sep="\t", index_col=1)
-genes.index.name = None
-genes.columns = ["gene_id"]
+dir = "GSE166555" # 根据实际情况进行修改
 
-adata = sc.AnnData(X=mtx.X, obs=barcodes, var=genes)
-adata.obs["Sample"] = ["_".join(x.split("_")[1:3]) for x in adata.obs_names]
-adata.obs["Class"] = [x.split("_")[1] for x in adata.obs["Sample"]]
-adata.obs.index.name = None
+filenames = os.listdir(f"{dir}/data")
+adatas = []
+for filename in filenames:
+    count = dt.fread(f"{dir}/data/{filename}", sep="\t")
+    adata = count[:, 1:].to_pandas()
+    adata.index = count[:, 0].to_list()[0]
+    adata = adata.T
+
+    adata=sc.AnnData(adata)
+    adata.var_names_make_unique()
+    adatas.append(adata)
+adata = sc.concat(adatas)
 adata.var_names_make_unique()
-adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
+
+meta1 = pd.read_csv(f"{dir}/GSE166555_meta_data.tsv.gz", sep="\t", index_col=0)
+meta1["Sample"] = meta1.index.str.split(":").str[0]
+meta1["Class"] = meta1["Sample"].str[-2:]
+meta1.loc[meta1["Class"].str.contains("n"), "Class"] = "Normal"
+meta1.loc[meta1["Class"].str.contains("t"), "Class"] = "Tumor"
+meta1["Source"] = dir
+meta1 = meta1.loc[:, ["Sample", "Class", "Source"]]
+meta2 = pd.read_csv(f"{dir}/{dir}.txt", index_col=0, sep="\t")
+
+meta = meta1.join(meta2, on="Sample", how="left")
+adata.obs = adata.obs.join(meta, how="left")
+adata.write_h5ad(f"{dir}/{dir}.h5ad")
 
 ###################################################################################################
 # 质量控制
