@@ -41,9 +41,11 @@ adata.obs = meta.copy()
 adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
-# 方法二
+# 方法二: 存在barcodes、features和matrix，但是文件前面有前缀
 ###################################################################################################
-p = Path("GSE231559/data")
+dir = "GSE161277" # 根据实际情况进行修改
+
+p = Path(f"{dir}/data")
 seen = set()
 for f in p.iterdir():
     name = f.name
@@ -57,10 +59,15 @@ prefixes = sorted(seen)
 
 adatas = []
 for prefix in prefixes:
-    adata = sc.read_10x_mtx(path="GSE231559/data", var_names="gene_symbols", cache=True, prefix=prefix)
-    adata.obs["Sample"] = prefix.split("_")[0]
+    adata = sc.read_10x_mtx(path=f"{dir}/data", var_names="gene_symbols", cache=False, prefix=prefix)
+    adata.obs["Source"] = dir
+    adata.obs["Sample"] = "_".join(prefix.split("_")[1:3])
+    adata.obs["Class"] = prefix.split("_")[2]
+    adata.var_names_make_unique()
     adatas.append(adata)
 adata = sc.concat(adatas)
+adata.var_names_make_unique()
+adata.write_h5ad(f"{dir}/python/{dir}.h5ad")
 
 ###################################################################################################
 # 方法三
