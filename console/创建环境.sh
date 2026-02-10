@@ -45,3 +45,6 @@ install.packages("Matrix")
 BiocManager::install("glmGamPoi")
 install.packages("Rfast2")
 remotes::install_github('chris-mcginnis-ucsf/DoubletFinder', force = TRUE)
+
+# scenv
+$ conda install -c conda-forge scanpy python-igraph leidenalg
