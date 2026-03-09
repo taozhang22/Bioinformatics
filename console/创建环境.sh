@@ -48,3 +48,59 @@ remotes::install_github('chris-mcginnis-ucsf/DoubletFinder', force = TRUE)
 
 # scenv
 $ conda install -c conda-forge scanpy python-igraph leidenalg
+
+
+
+
+# scenv (win版本)
+conda activate base
+conda create -n scenv python=3.11 -y
+conda activate scenv
+conda install r-base=4.4.1 -y
+conda install scanpy -y
+conda install rpy2 -y
+pip install ipykernel
+python -m ipykernel install --user --name=scenv --display-name "scenv"
+pip install papermill
+pip install ipython-autotime
+pip install openpyxl
+pip install igraph
+pip install leidenalg
+pip install scikit-image
+pip install harmonypy
+pip install infercnvpy
+pip install gseapy
+pip install sccoda
+pip install liana
+pip install cellphonedb
+pip install palantir
+pip install scvelo
+pip install datatable
+pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu128
+pip install scvi-tools
+
+# scenv (linux版本)
+conda activate base
+conda create -n scenv python=3.10 -y
+conda activate scenv
+conda install r-base=4.4.1 -y
+conda install scanpy -y
+conda install rpy2 -y
+pip install ipykernel
+python -m ipykernel install --user --name=scenv --display-name "scenv"
+pip install papermill
+pip install ipython-autotime
+pip install openpyxl
+pip install igraph
+pip install leidenalg
+pip install scikit-image
+pip install scvi-tools[cuda]
+pip install harmonypy
+pip install infercnvpy
+pip install gseapy
+pip install sccoda
+pip install liana
+pip install cellphonedb
+pip install palantir
+pip install scvelo
+pip install datatable
