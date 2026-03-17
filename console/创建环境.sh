@@ -9,6 +9,18 @@ pip install scanpy igraph leidenalg
 pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu128
 pip install scvi-tools
 
+# st
+conda activate base
+conda create -n st python=3.12 -y
+conda activate st
+pip install ipykernel
+python -m ipykernel install --user --name=st --display-name "st"
+pip install papermill
+pip install scanpy
+pip install squidpy
+pip install stlearn
+
+
 
 
 
