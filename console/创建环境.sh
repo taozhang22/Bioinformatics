@@ -11,14 +11,13 @@ pip install scvi-tools
 
 # st
 conda activate base
-conda create -n st python=3.12 -y
+conda create -n st python=3.11 -y
 conda activate st
 pip install ipykernel
 python -m ipykernel install --user --name=st --display-name "st"
 pip install papermill
 pip install scanpy igraph leidenalg
 pip install squidpy
-pip install stlearn
 
 
 
