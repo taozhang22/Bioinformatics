@@ -18,7 +18,7 @@ python -m ipykernel install --user --name=st --display-name "st"
 pip install papermill
 pip install scanpy igraph leidenalg
 pip install squidpy
-
+pip install scanorama
 
 
 
