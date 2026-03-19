@@ -6,8 +6,10 @@ pip install ipykernel
 python -m ipykernel install --user --name=scenv --display-name "scenv"
 pip install papermill
 pip install scanpy igraph leidenalg
+pip install scikit-image # 去除双细胞的时候用
 pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu128
 pip install scvi-tools
+pip install infercnvpy
 
 # st
 conda activate base
