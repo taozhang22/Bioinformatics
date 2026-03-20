@@ -11,6 +11,32 @@ pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https
 pip install scvi-tools
 pip install infercnvpy
 
+# cytotrace2
+conda activate base
+conda create -n cytotrace2 python=3.9.19 -y
+conda activate cytotrace2
+pip install ipykernel
+python -m ipykernel install --user --name=cytotrace2 --display-name "cytotrace2"
+pip install papermill
+pip install pandas numpy==1.26.4 matplotlib seaborn
+pip install scanpy
+pip install torch==2.0.0 scikit-learn==1.0.2 scipy
+
+
+
+
+ python=3.9.19
+  - anndata
+  - matplotlib
+  - numpy
+  - pandas
+  - pytorch=2.0.0
+  - scanpy
+  - scikit-learn=1.0.2
+  - scipy
+  - seaborn
+  - notebook # optional, for jupyter notebook
+
 # st
 conda activate base
 conda create -n st python=3.11 -y
